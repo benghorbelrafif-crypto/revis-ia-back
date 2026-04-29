@@ -4,62 +4,124 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from groq import Groq
 
-# Configuration du client Groq via la variable d'environnement
+# =========================
+# CONFIG
+# =========================
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 app = Flask(__name__)
 CORS(app)
 
+# =========================
+# ROUTES
+# =========================
 @app.route('/')
 def home():
-    return "🚀 Le serveur Révis'IA est en ligne et prêt !"
+    return "🚀 Révis'IA est en ligne !"
 
 @app.route('/generer', methods=['POST'])
 def generer():
     data = request.json
-    cours = data.get('cours')
+    cours = data.get('cours', '').strip()
 
     if not cours:
         return jsonify({"error": "Aucun texte fourni"}), 400
 
     try:
-        # Appel à l'IA Llama 3
+        # =========================
+        # APPEL IA
+        # =========================
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            max_tokens=6000,
+            temperature=0.4,
+            max_tokens=4000,
             messages=[
                 {
-                    "role": "system", 
-                    "content": "Tu es un assistant pédagogique expert. Ton format de réponse est TOUJOURS un JSON pur."
+                    "role": "system",
+                    "content": (
+                        "Tu es un assistant pédagogique expert. "
+                        "Tu dois répondre UNIQUEMENT en JSON valide, sans texte autour."
+                    )
                 },
                 {
-                    "role": "user", 
+                    "role": "user",
                     "content": f"""
-                    Analyse ce cours : {cours}
-                    Génère un objet JSON avec :
-                    1. 'resume' : Un résumé détaillé et structuré.
-                    2. 'flashcards' : Liste d'objets (question/reponse).
-                    3. 'quiz' : QCM avec 'question', 'options' (4 choix), et 'reponse_correcte'.
-                    """
+Analyse ce cours :
+
+{cours}
+
+=========================
+OBJECTIF
+=========================
+
+Transforme ce cours en un JSON structuré pour révision.
+
+=========================
+FORMAT OBLIGATOIRE
+=========================
+
+{{
+  "resume": [
+    {{
+      "titre": "Titre de la partie",
+      "resume": "Explication claire et simple de la partie",
+      "points_cles": [
+        "Point important 1",
+        "Point important 2",
+        "Point important 3"
+      ]
+    }}
+  ],
+  "flashcards": [
+    {{
+      "question": "Question",
+      "reponse": "Réponse"
+    }}
+  ],
+  "quiz": [
+    {{
+      "question": "Question",
+      "options": ["A", "B", "C", "D"],
+      "reponse_correcte": "A"
+    }}
+  ]
+}}
+
+=========================
+REGLES IMPORTANTES
+=========================
+- Découpe le cours en VRAIES parties logiques
+- "resume" DOIT être une liste
+- Pas de texte hors JSON
+- Réponses simples et pédagogiques
+"""
                 }
             ],
             response_format={"type": "json_object"}
         )
-        
+
+        # =========================
+        # PARSING SAFE JSON
+        # =========================
         reponse_brute = completion.choices[0].message.content
         reponse_ia = json.loads(reponse_brute)
-        
+
         return jsonify(reponse_ia)
-        
+
     except Exception as e:
-        print(f"Erreur détectée : {e}")
+        print("Erreur détectée :", e)
+
         return jsonify({
             "error": str(e),
-            "resume": "Désolé, une erreur est survenue.",
+            "resume": [],
             "flashcards": [],
             "quiz": []
         }), 500
 
+
+# =========================
+# RUN SERVER
+# =========================
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)

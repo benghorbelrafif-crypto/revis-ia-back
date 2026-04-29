@@ -34,7 +34,7 @@ def generer():
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             temperature=0.3,
-            max_tokens=1200,
+            max_tokens=4500,
             messages=[
                 {
                     "role": "system",

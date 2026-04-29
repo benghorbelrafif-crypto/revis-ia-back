@@ -40,8 +40,8 @@ def generer():
                     "role": "system",
                     "content": (
                         "Tu es un assistant pédagogique expert. "
-                        "Tu dois répondre UNIQUEMENT en JSON valide, sans aucun texte autour. "
-                        "Tu structures les cours pour aider à réviser efficacement."
+                        "Tu dois répondre UNIQUEMENT en JSON valide, sans texte autour. "
+                        "Tu es extrêmement précis et complet."
                     )
                 },
                 {
@@ -54,7 +54,7 @@ Analyse ce cours :
 =========================
 OBJECTIF
 =========================
-Transformer ce cours en support de révision clair, structuré et pédagogique.
+Transformer ce cours en support de révision COMPLET, STRUCTURÉ et EXHAUSTIF.
 
 =========================
 FORMAT OBLIGATOIRE
@@ -63,21 +63,21 @@ FORMAT OBLIGATOIRE
 {{
   "resume": [
     {{
-      "titre": "Titre de la partie",
-      "resume": "Explication simple et claire de la partie",
+      "titre": "Nom de la partie du cours",
+      "resume": "Explication claire, détaillée mais simple",
       "points_cles": [
-  "Tous les points importants du cours sous forme de liste",
-  "Chaque point doit être indépendant et clair",
-  "Aucun résumé global ici"
-]
+        "Tous les points importants de cette partie",
+        "Aucune limite de nombre",
+        "Chaque point = une idée distincte"
+      ]
     }}
   ],
 
   "flashcards": [
     {{
       "importance": "essentiel | important | secondaire",
-      "question": "Question basée sur une idée clé du cours",
-      "reponse": "Réponse claire"
+      "question": "Question basée sur UNE idée du cours",
+      "reponse": "Réponse claire et complète"
     }}
   ],
 
@@ -96,18 +96,21 @@ REGLES IMPORTANTES
 
 RESUME :
 - Découpe le cours en parties logiques
+- Toutes les notions doivent apparaître
 
 FLASHCARDS :
-- 3 niveaux d’importance OBLIGATOIRE :
-  - essentiel (les notions les plus importantes du cours)
-  - important
-  - secondaire
-- Les flashcards doivent être triées du plus important au moins important
+- UNE flashcard par idée du cours (aucune limite)
+- Couvrir 100% du cours
+- Trier par importance :
+  - essentiel = notions indispensables
+  - important = notions utiles
+  - secondaire = détails / exemples
 
 GLOBAL :
-- Pas de texte hors JSON
-- Réponses simples
-- Contenu pédagogique et clair
+- Aucun texte hors JSON
+- Réponse structurée et pédagogique
+- Ne pas résumer trop fortement
+- Être exhaustif
 """
                 }
             ],

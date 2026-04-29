@@ -34,14 +34,14 @@ def generer():
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             temperature=0.3,
-            max_tokens=4000,
+            max_tokens=4500,
             messages=[
                 {
                     "role": "system",
                     "content": (
                         "Tu es un assistant pédagogique expert. "
-                        "Tu dois répondre UNIQUEMENT en JSON valide, sans texte autour. "
-                        "Tu es extrêmement précis et complet."
+                        "Tu réponds UNIQUEMENT en JSON valide, sans texte autour. "
+                        "Tu es précis, structuré et exhaustif."
                     )
                 },
                 {
@@ -54,7 +54,7 @@ Analyse ce cours :
 =========================
 OBJECTIF
 =========================
-Transformer ce cours en support de révision COMPLET, STRUCTURÉ et EXHAUSTIF.
+Transformer ce cours en un outil de révision complet.
 
 =========================
 FORMAT OBLIGATOIRE
@@ -63,12 +63,11 @@ FORMAT OBLIGATOIRE
 {{
   "resume": [
     {{
-      "titre": "Nom de la partie du cours",
-      "resume": "Explication claire, détaillée mais simple",
+      "titre": "Partie du cours",
+      "resume": "Explication simple et claire",
       "points_cles": [
-        "Tous les points importants de cette partie",
-        "Aucune limite de nombre",
-        "Chaque point = une idée distincte"
+        "Toutes les idées importantes (sans limite)",
+        "Chaque point = une notion distincte"
       ]
     }}
   ],
@@ -76,16 +75,17 @@ FORMAT OBLIGATOIRE
   "flashcards": [
     {{
       "importance": "essentiel | important | secondaire",
-      "question": "Question basée sur UNE idée du cours",
-      "reponse": "Réponse claire et complète"
+      "question": "Question basée sur une idée du cours",
+      "reponse": "Réponse claire"
     }}
   ],
 
   "quiz": [
     {{
-      "question": "Question",
+      "question": "Question basée sur une idée du cours",
       "options": ["A", "B", "C", "D"],
-      "reponse_correcte": "A"
+      "reponse_correcte": "Bonne réponse (placée aléatoirement dans les options)",
+      "explication": "Explication simple qui rappelle la notion du cours"
     }}
   ]
 }}
@@ -95,22 +95,28 @@ REGLES IMPORTANTES
 =========================
 
 RESUME :
-- Découpe le cours en parties logiques
-- Toutes les notions doivent apparaître
+- Découpage logique du cours
+- Toutes les notions doivent être incluses
 
 FLASHCARDS :
-- UNE flashcard par idée du cours (aucune limite)
-- Couvrir 100% du cours
-- Trier par importance :
-  - essentiel = notions indispensables
-  - important = notions utiles
-  - secondaire = détails / exemples
+- UNE flashcard par idée du cours
+- Pas de limite de quantité
+- Triées par importance :
+  - essentiel
+  - important
+  - secondaire
+
+QUIZ :
+- Questions sur TOUTES les idées du cours (même petites)
+- Ordre complètement mélangé
+- Chaque question doit tester une idée différente
+- La bonne réponse doit être placée aléatoirement dans A/B/C/D
+- Chaque question doit contenir une explication pédagogique
 
 GLOBAL :
 - Aucun texte hors JSON
-- Réponse structurée et pédagogique
-- Ne pas résumer trop fortement
-- Être exhaustif
+- Réponse structurée
+- Exhaustif et pédagogique
 """
                 }
             ],

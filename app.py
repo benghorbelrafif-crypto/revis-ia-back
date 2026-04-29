@@ -66,10 +66,10 @@ FORMAT OBLIGATOIRE
       "titre": "Titre de la partie",
       "resume": "Explication simple et claire de la partie",
       "points_cles": [
-        "Point important 1",
-        "Point important 2",
-        "Point important 3"
-      ]
+  "Tous les points importants du cours sous forme de liste",
+  "Chaque point doit être indépendant et clair",
+  "Aucun résumé global ici"
+]
     }}
   ],
 

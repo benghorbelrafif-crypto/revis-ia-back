@@ -33,14 +33,15 @@ def generer():
         # =========================
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            temperature=0.4,
+            temperature=0.3,
             max_tokens=4000,
             messages=[
                 {
                     "role": "system",
                     "content": (
                         "Tu es un assistant pédagogique expert. "
-                        "Tu dois répondre UNIQUEMENT en JSON valide, sans texte autour."
+                        "Tu dois répondre UNIQUEMENT en JSON valide, sans aucun texte autour. "
+                        "Tu structures les cours pour aider à réviser efficacement."
                     )
                 },
                 {
@@ -53,8 +54,7 @@ Analyse ce cours :
 =========================
 OBJECTIF
 =========================
-
-Transforme ce cours en un JSON structuré pour révision.
+Transformer ce cours en support de révision clair, structuré et pédagogique.
 
 =========================
 FORMAT OBLIGATOIRE
@@ -64,7 +64,7 @@ FORMAT OBLIGATOIRE
   "resume": [
     {{
       "titre": "Titre de la partie",
-      "resume": "Explication claire et simple de la partie",
+      "resume": "Explication simple et claire de la partie",
       "points_cles": [
         "Point important 1",
         "Point important 2",
@@ -72,12 +72,15 @@ FORMAT OBLIGATOIRE
       ]
     }}
   ],
+
   "flashcards": [
     {{
-      "question": "Question",
-      "reponse": "Réponse"
+      "importance": "essentiel | important | secondaire",
+      "question": "Question basée sur une idée clé du cours",
+      "reponse": "Réponse claire"
     }}
   ],
+
   "quiz": [
     {{
       "question": "Question",
@@ -90,10 +93,21 @@ FORMAT OBLIGATOIRE
 =========================
 REGLES IMPORTANTES
 =========================
-- Découpe le cours en VRAIES parties logiques
-- "resume" DOIT être une liste
+
+RESUME :
+- Découpe le cours en parties logiques
+
+FLASHCARDS :
+- 3 niveaux d’importance OBLIGATOIRE :
+  - essentiel (les notions les plus importantes du cours)
+  - important
+  - secondaire
+- Les flashcards doivent être triées du plus important au moins important
+
+GLOBAL :
 - Pas de texte hors JSON
-- Réponses simples et pédagogiques
+- Réponses simples
+- Contenu pédagogique et clair
 """
                 }
             ],

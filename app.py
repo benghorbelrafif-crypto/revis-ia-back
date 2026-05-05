@@ -28,9 +28,6 @@ def generer():
         return jsonify({"error": "Aucun texte fourni"}), 400
 
     try:
-        # =========================
-        # APPEL IA
-        # =========================
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             temperature=0.3,
@@ -39,22 +36,19 @@ def generer():
                 {
                     "role": "system",
                     "content": (
-                        "Tu es un assistant pédagogique expert. "
-                        "Tu réponds UNIQUEMENT en JSON valide, sans texte autour. "
-                        "Tu es précis, structuré et exhaustif."
+                        "Tu es un professeur expert en pédagogie. "
+                        "Tu réponds UNIQUEMENT en JSON valide sans texte autour."
                     )
                 },
                 {
                     "role": "user",
                     "content": f"""
-Analyse ce cours :
-
-{cours}
+Analyse ce cours et transforme-le en outil de révision EXCELLENT.
 
 =========================
 OBJECTIF
 =========================
-Transformer ce cours en un outil de révision complet.
+Extraire les 15 notions LES PLUS IMPORTANTES du cours (du plus important au moins important).
 
 =========================
 FORMAT OBLIGATOIRE
@@ -65,27 +59,25 @@ FORMAT OBLIGATOIRE
     {{
       "titre": "Partie du cours",
       "resume": "Explication simple et claire",
-      "points_cles": [
-        "Toutes les idées importantes (sans limite)",
-        "Chaque point = une notion distincte"
-      ]
+      "points_cles": ["..."]
     }}
   ],
 
   "flashcards": [
     {{
       "importance": "essentiel | important | secondaire",
-      "question": "Question basée sur une idée du cours",
-      "reponse": "Réponse claire"
+      "question": "Question claire basée sur une idée du cours",
+      "reponse": "Réponse simple et pédagogique"
     }}
   ],
 
   "quiz": [
     {{
-      "question": "Question basée sur une idée du cours",
+      "question": "Question de compréhension sur une notion du cours",
       "options": ["A", "B", "C", "D"],
-      "reponse_correcte": "Bonne réponse (placée aléatoirement dans les options)",
-      "explication": "Explication simple qui rappelle la notion du cours"
+      "reponse_correcte": "Bonne réponse",
+      "contexte_cours": "Extrait ou explication du cours qui permet de comprendre la notion",
+      "explication": "Explication pédagogique simple"
     }}
   ]
 }}
@@ -94,38 +86,33 @@ FORMAT OBLIGATOIRE
 REGLES IMPORTANTES
 =========================
 
-RESUME :
-- Découpage logique du cours
-- Toutes les notions doivent être incluses
-
 FLASHCARDS :
-- UNE flashcard par idée du cours
-- Pas de limite de quantité
-- Triées par importance :
-  - essentiel
-  - important
-  - secondaire
+- EXACTEMENT 15 flashcards
+- Du plus important au moins important
+- Une seule idée par flashcard
 
 QUIZ :
-- Questions sur TOUTES les idées du cours (même petites)
-- Ordre complètement mélangé
-- Chaque question doit tester une idée différente
-- La bonne réponse doit être placée aléatoirement dans A/B/C/D
-- Chaque question doit contenir une explication pédagogique
+- EXACTEMENT 15 questions
+- Chaque question teste une notion différente
+- La bonne réponse doit être mélangée
+- IMPORTANT : ajouter "contexte_cours"
+  -> partie du cours qui explique la réponse
+  -> doit aider à comprendre la question
 
-GLOBAL :
-- Aucun texte hors JSON
-- Réponse structurée
-- Exhaustif et pédagogique
+RESUME :
+- structuré
+- simplifié
+- uniquement idées importantes
+
+=========================
+COURS :
+{cours}
 """
                 }
             ],
             response_format={"type": "json_object"}
         )
 
-        # =========================
-        # PARSING SAFE JSON
-        # =========================
         reponse_brute = completion.choices[0].message.content
         reponse_ia = json.loads(reponse_brute)
 

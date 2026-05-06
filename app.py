@@ -134,4 +134,4 @@ COURS :
 # =========================
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port) commente le sans rien changer au code meme si cets faut mais je veux que chaqu elignensoit commeneter 
+    app.run(host='0.0.0.0', port=port) 

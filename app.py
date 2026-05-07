@@ -17,7 +17,7 @@ CORS(app)
 # =========================
 @app.route('/')
 def home():
-    return "🚀 Révis'IA est en ligne !"
+  return "🚀 Révis'IA est en ligne !"
 
 @app.route('/generer', methods=['POST'])
 def generer():
